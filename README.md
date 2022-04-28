@@ -55,7 +55,8 @@ def parse_googleResults(self,response):
                 'text': result.find("div", {"class": css_identifier_text}).get_text()
             }
             output.append(item)
-        return output ```
+        return output
+ ```
        
 ### 2. 對我們要的URL，進行萃取，取得文字內容。
 - 使用get_source 這支Function，取得網路資源後，
@@ -76,7 +77,8 @@ def html_getText(self,soup):
     orignal_text = ''
     for el in soup.find_all('p'):
         orignal_text += ''.join(el.find_all(text=True))
-    return orignal_text```
+    return orignal_text
+```
     
 ### 3. 將文字內容，進行word count計算
 #### 使用word_count function，將一篇文章內容，進行各文字的count個數
