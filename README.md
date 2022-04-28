@@ -95,7 +95,8 @@ def word_count(self, text):
                     counts[word] += 1
                 else:
                     counts[word] = 1
-        return counts ```
+        return counts
+```
         
 ### 4. 將聲量結果儲存到Excel
 #### 使用get_wordcount_json function濾掉不要的word count dict, 取自己要的(whitelist)
