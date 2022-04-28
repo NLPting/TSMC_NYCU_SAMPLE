@@ -1,0 +1,6 @@
+requests-html
+pandas
+requests
+beautifulsoup4
+nltk
+openpyxl

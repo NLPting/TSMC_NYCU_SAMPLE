@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crawler-deployment
+  labels:
+    app: crawler
+  namespace: test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crawler
+  template:
+    metadata:
+      labels:
+        app: crawler
+    spec:
+      imagePullSecrets: 
+        - name: myregistrykey
+      containers:
+      - name: crawler
+        # image: mongo:latest
+        image: tig4605246/ubuntu_util:0.2
+        ports:
+        - containerPort: 80
+          name: crawler
+        resources:
+          requests:
+            cpu: 1
+            memory: 1Gi
+          limits:
+            cpu: 1
+            memory: 1Gi
