@@ -12,6 +12,18 @@
 ### 3. 執行crawler_sample.py
 ### 4. 產出Excel 檔案，以做分析。
 
+## 執行Pytest
+### 1. 把UT寫在tests資料夾(你也可以自己定義)
+### 2. 下指令: python -m pytest . tests --doctest-modules --junitxml=test-results.xml --cov-config=.coveragerc --cov=. --cov-report=html
+### 3. Coverage結果，會放在htmlcov 資料夾(自己會長出來)。
+### 4. 點擊程式的.html檔案，確認Coverage狀況
+
+## Build Image
+### 1. 準備好 Dockerfile
+### 2. docker login到你自己的dockerhub
+### 3. 開始Build image : docker build -t mycrawler:test
+### 4. 確認是否成功: docker image ls	
+
 ## 範例程式碼，詳細解析請參考如下:
 ### 事前準備
 ### 1. pip install notebook
