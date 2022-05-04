@@ -53,7 +53,7 @@ class GoogleCrawler():
     def google_search(self,query,timeline='',page='0'):
         url = self.url + query + '&tbs={timeline}&start={page}'.format(timeline=timeline,page=page)
         print('[Check][URL] URL : {url}'.format(url=url))
-        response = self.get_source(self.url + query)
+        response = self.get_source(url)
         return self.parse_googleResults(response)
     # Google Search Result Parsing
     def parse_googleResults(self,response):
