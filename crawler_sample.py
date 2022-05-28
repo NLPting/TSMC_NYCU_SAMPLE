@@ -7,7 +7,11 @@ from bs4 import BeautifulSoup
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-nltk.download()
+import socket
+import time
+
+nltk.download('stopwords')
+nltk.download('punkt')
 
 class GoogleCrawler():
     
@@ -107,9 +111,9 @@ class GoogleCrawler():
             }
             data_array.append(json_data)
         return data_array
-    def jsonarray_toexcel(self,data_array):
+    def jsonarray_toexcel(self,data_array,out_file='result.xlsx'):
         df = pd.DataFrame(data=data_array)
-        df.to_excel('result.xlsx' , index=False)
+        df.to_excel(out_file , index=False)
         return
     
 if __name__ == "__main__":
@@ -117,15 +121,29 @@ if __name__ == "__main__":
     crawler = GoogleCrawler()
     results = crawler.google_search(query , 'qdr:w' , '10')
     print(results[:3])
-    Target_URL = 'https://taipeitimes.com/News/biz/archives/2022/01/20/2003771688'
-    response = crawler.get_source(Target_URL)
-    soup = crawler.html_parser(response.text)
-    orignal_text = crawler.html_getText(soup)
-    print(orignal_text[:100])
-    result_wordcount = crawler.word_count(orignal_text)
-    result_wordcount
-    whitelist = ['ASML' , 'Intel']
-    end_result = crawler.get_wordcount_json(whitelist , result_wordcount)
-    print(end_result)
-    crawler.jsonarray_toexcel(end_result)
-    print('Excel is OK')
+
+    HOST = '0.0.0.0'
+    PORT = 7878
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((HOST,PORT))
+    s.listen(2)
+
+    while(1):
+        print("Listen at port 7878:")
+        conn, addr = s.accept()
+        print('connected by ' + str(addr))
+        indata = conn.recv(1024)
+        # Target_URL = 'https://taipeitimes.com/News/biz/archives/2022/01/20/2003771688'
+        Target_URL = indata.decode()
+        response = crawler.get_source(Target_URL)
+        soup = crawler.html_parser(response.text)
+        orignal_text = crawler.html_getText(soup)
+        print(orignal_text[:100])
+        result_wordcount = crawler.word_count(orignal_text)
+        result_wordcount
+        whitelist = ['ASML' , 'Intel']
+        end_result = crawler.get_wordcount_json(whitelist , result_wordcount)
+        print(end_result)
+        crawler.jsonarray_toexcel(end_result, time.time() + ".xlsx")
+        print('Excel is OK')
+        s.close()
