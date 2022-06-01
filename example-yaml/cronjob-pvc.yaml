@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  namespace: default
+  name: save-result
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: write-file
+            image: tig4605246/test:0.1
+            volumeMounts:
+            - name: history-dir
+              mountPath: /var/log/history
+          restartPolicy: OnFailure
+          volumes:
+          - name: history-dir
+            persistentVolumeClaim:
+              claimName: pvc-demo
