@@ -1,0 +1,6 @@
+1. 準備DockerFile & Docker環境
+2. 在有DockerFil的Folder下 : docker build -t crawler:1.0.0 . => Local Build Image
+3. docker tag crawler:1.0.0 tsmcting/crawler:1.0.0  => Tag Image
+4. docker login => login到你的Docker Hub帳號
+5. docker push tsmcting/crawler:1.0.0
+6. 確認是否push成功https://hub.docker.com/layers/225797407/tsmcting/crawler/1.0.0/images/sha256-c622f3fc74fcc729b95da1027d7844b9dc50b9fd7b610035a5ccfacfeba72ff2?context=repo
