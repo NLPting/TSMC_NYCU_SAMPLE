@@ -3,7 +3,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pvc-demo
-  namespace: fefault
+  namespace: default
 spec:
   accessModes:
     - ReadWriteOnce
