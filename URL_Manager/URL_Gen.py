@@ -1,10 +1,7 @@
 from bs4 import BeautifulSoup
-from requests_html import HTML
-from requests_html import HTMLSession
+from requests_html import HTML, HTMLSession
 import requests
-import sys
-import schedule
-import time
+import sys, os, time, schedule, socket
 
 
 class UrlGenerator():
@@ -19,10 +16,11 @@ class UrlGenerator():
         response = self.get_source(search_url)
         retry_count = 0
         while response is None:
+            print('Retrying Connection ...', file=sys.stderr)
             retry_count += 1
             if retry_count > retry:
                 print('Reached Retry Limit', file=sys.stderr)
-                sys.exit(-1)
+                os._exit(-1)
             response = self.get_source(search_url)
 
         self.parse_googleResults(response)
@@ -51,6 +49,8 @@ class UrlGenerator():
 
 
 urlGenerator = UrlGenerator()
+service_host = "localhost"
+service_port = 7878
 
 
 def time_str():
@@ -63,7 +63,7 @@ def generate_url():
     supplier = ["Applied Materials", "ASML", "SUMCO"]
     results = []
     for sup in supplier:
-        urlGenerator.google_search(query+sup)
+        urlGenerator.google_search(query+sup, timeline='qdr:m')
         print(sup + ":")
         for res in urlGenerator.results:
             print('-', res['title'])
@@ -73,10 +73,23 @@ def generate_url():
     return results
 
 def send_links(links):
-    pass
+    try:
+        print('Sending Links ...')
+        for link in links:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.connect((service_host, service_port))
+            print('-', link)
+            outstr = link + '\n'
+            sock.sendall(outstr.encode('ascii'))
+            sock.close()
+    except socket.error as e:
+        print(e, file=sys.stderr)
+        os._exit(1)
+
 
 # Repeat the Job every hour
-@schedule.repeat(schedule.every().hour)
+#@schedule.repeat(schedule.every().hour)
+@schedule.repeat(schedule.every(5).minutes)
 def job():
     print(time_str())
     results = generate_url()
@@ -85,6 +98,10 @@ def job():
 
 
 if __name__ == '__main__':
+    # Initial Job
+    job()
+
+    # Check pending job every 5 minutes
     while True:
         schedule.run_pending()
         time.sleep(60)
