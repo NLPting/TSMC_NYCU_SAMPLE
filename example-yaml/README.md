@@ -1,6 +1,15 @@
 # Example of CronJob With Persistent Volume
 
+
+
 ```
+# 如果你有自己客製化的image要變成cronjob，將image改寫到cronjob-pvc.yaml
+spec:
+    containers:
+    - name: write-file
+      image: tsmcting/crawler:1.0.0  # 這邊改寫
+
+
 # Apply example PVC to cluster (如果你的GCP Kluste已經掛好PVC,這一步不需做)
 kubectl apply -f pvc-demo.yaml
 
