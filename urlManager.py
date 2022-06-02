@@ -3,6 +3,8 @@ from requests_html import HTML
 from requests_html import HTMLSession
 import requests
 import sys
+import schedule
+import time
 
 
 class UrlGenerator():
@@ -11,9 +13,9 @@ class UrlGenerator():
         self.results = []
 
     # Google search with queries and parameters
-    def google_search(self, query, timeline='qdr:h', page='5', retry=10):
+    def google_search(self, query, timeline='qdr:h', page='10', retry=10):
         search_url = self.url + query + \
-            '&tbs={timeline}&start={page}'.format(timeline=timeline, page=page)
+            '&tbs={timeline}&start={page}&lr=lang_en'.format(timeline=timeline, page=page)
         response = self.get_source(search_url)
         retry_count = 0
         while response is None:
@@ -46,3 +48,25 @@ class UrlGenerator():
             link = result.find("div", {"class": css_identifier_link}).find(
                 href=True)['href']
             self.results.append({'title': title, 'link': link})
+
+
+urlGenerator = UrlGenerator()
+query = "TSMC ASML"
+
+
+@schedule.repeat(schedule.every().hour.at(":30"))
+def job():
+    t = time.localtime()
+    current_time = time.strftime("%H:%M:%S", t)
+    print('Current Time:', current_time)
+    urlGenerator.google_search(query, timeline='qdr:m', page='10')
+    for res in urlGenerator.results:
+        print('-', res['title'])
+    urlGenerator.results.clear()
+
+
+if __name__ == '__main__':
+    while True:
+        print('Check Pending Jobs')
+        schedule.run_pending()
+        time.sleep(300)
