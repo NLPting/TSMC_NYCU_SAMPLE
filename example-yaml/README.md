@@ -9,6 +9,8 @@ spec:
     - name: write-file
       image: tsmcting/crawler:1.0.0  # 這邊改寫
 
+# Apply example Base Pod Container to cluster (佈署一個Base的Container環境)
+kubectl apply -f pod.yaml
 
 # Apply example PVC to cluster (如果你的GCP Kluste已經掛好PVC,這一步不需做)
 kubectl apply -f pvc-demo.yaml
