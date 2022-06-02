@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
           - name: write-file
-            image: tig4605246/test:0.1
+            image: tsmcting/crawler:1.0.0
             volumeMounts:
             - name: history-dir
               mountPath: /var/log/history
