@@ -7,7 +7,9 @@ from bs4 import BeautifulSoup
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-nltk.download()
+from datetime import datetime
+
+nltk.download.all()
 
 class GoogleCrawler():
     
@@ -109,7 +111,11 @@ class GoogleCrawler():
         return data_array
     def jsonarray_toexcel(self,data_array):
         df = pd.DataFrame(data=data_array)
-        df.to_excel('result.xlsx' , index=False)
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        filename = current_time + ".xlsx"
+        print("save result as "+filename)
+        df.to_excel(filename , index=False)
         return
     
 if __name__ == "__main__":
