@@ -3,16 +3,14 @@ RUN apk add --no-cache \
     python3 \
     py3-pip \
     py3-wheel \
-    py3-pandas \
     py3-requests \
     py3-beautifulsoup4 \
-    py3-openpyxl
 
 RUN pip install \
     requests-html \
     nltk
 
-RUN python3 -m nltk.downloader -d /usr/share/nltk_data -q all
+RUN python3 -m nltk.downloader -d /usr/share/nltk_data -q popular
 
 COPY . /sample_crawler
 WORKDIR /sample_crawler
