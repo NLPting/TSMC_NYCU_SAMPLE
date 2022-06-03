@@ -4,7 +4,7 @@ on:
     paths-ignore:
       - '**.md'
       - '**.ipynb'
-      - 'crawler.yaml'
+      - 'example-yaml/**'
   workflow_dispatch:
     {}
 env:

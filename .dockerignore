@@ -1,7 +1,7 @@
 .git/
 .github/
 .gitignore
-crawler.yaml
+example-yaml/
 *.ipynb
 *.md
 *.xlsx
