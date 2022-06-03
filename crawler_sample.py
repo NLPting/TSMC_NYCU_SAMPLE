@@ -9,9 +9,9 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
 class GoogleCrawler():
-    
+
     def __init__(self):
-        self.url = 'https://www.google.com/search?q='    
+        self.url = 'https://www.google.com/search?q='
     #  URL 萃取 From Google Search上 , using 第三方套件
     #  https://python-googlesearch.readthedocs.io/en/latest/
     def google_url_search_byOpenSource(query,tbs='qdr:m',num=10):
@@ -30,10 +30,10 @@ class GoogleCrawler():
 
         response = self.get_source(self.url + query)
         links = list(response.html.absolute_links)
-        google_domains = ('https://www.google.', 
-                          'https://google.', 
-                          'https://webcache.googleusercontent.', 
-                          'http://webcache.googleusercontent.', 
+        google_domains = ('https://www.google.',
+                          'https://google.',
+                          'https://webcache.googleusercontent.',
+                          'http://webcache.googleusercontent.',
                           'https://policies.google.',
                           'https://support.google.',
                           'https://maps.google.')
@@ -42,7 +42,7 @@ class GoogleCrawler():
             if url.startswith(google_domains):
                 links.remove(url)
         return links
-    
+
 # URL萃取器，有link之外，也有標題
 #     qdr:h (past hour)
 #     qdr:d (past day)
@@ -72,7 +72,7 @@ class GoogleCrawler():
             }
             output.append(item)
         return output
-    
+
     # 網頁解析器
     def html_parser(self,htmlText):
         soup = BeautifulSoup(htmlText, 'html.parser')
@@ -83,7 +83,7 @@ class GoogleCrawler():
         for el in soup.find_all('p'):
             orignal_text += ''.join(el.find_all(text=True))
         return orignal_text
-    
+
     def word_count(self, text):
         counts = dict()
         stop_words = set(stopwords.words('english'))
@@ -101,7 +101,7 @@ class GoogleCrawler():
         for i in whitelist:
             json_data = {
                 'Date' : 'Week1',
-                'Company' : i , 
+                'Company' : i ,
                 'Count' : dict_data[i]
             }
             data_array.append(json_data)
@@ -110,7 +110,7 @@ class GoogleCrawler():
         df = pd.DataFrame(data=data_array)
         df.to_excel('result.xlsx' , index=False)
         return
-    
+
 if __name__ == "__main__":
     query = "TSMC ASML"
     crawler = GoogleCrawler()
