@@ -4,7 +4,7 @@ RUN apk add --no-cache \
     py3-pip \
     py3-wheel \
     py3-requests \
-    py3-beautifulsoup4 \
+    py3-beautifulsoup4
 
 RUN pip install \
     requests-html \
