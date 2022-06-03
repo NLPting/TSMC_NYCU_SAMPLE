@@ -1,4 +1,7 @@
 .git/
+.github/
 .gitignore
+crawler.yaml
+*.ipynb
 *.md
 *.xlsx
