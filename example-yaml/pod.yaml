@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ubuntu
+  namespace: default
+spec:
+  containers:
+  - name: ubuntu
+    image: ubuntu:20.04
+    resources:
+      limits:
+        cpu: 100m
+        memory: 200Mi
+    command:
+      - "sleep"
+      - "infinity"
+    volumeMounts:
+      - name: history-dir
+        mountPath: /var/log/history
+  volumes:
+  - name: history-dir
+    persistentVolumeClaim:
+      claimName: pvc-demo

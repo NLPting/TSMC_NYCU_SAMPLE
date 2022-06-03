@@ -1,4 +1,4 @@
-import requests
+﻿import requests
 import urllib
 import pandas as pd
 from requests_html import HTML
@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+from datetime import datetime
 
 class GoogleCrawler():
 
@@ -52,7 +53,7 @@ class GoogleCrawler():
     def google_search(self,query,timeline='',page='0'):
         url = self.url + query + '&tbs={timeline}&start={page}'.format(timeline=timeline,page=page)
         print('[Check][URL] URL : {url}'.format(url=url))
-        response = self.get_source(self.url + query)
+        response = self.get_source(url)
         return self.parse_googleResults(response)
     # Google Search Result Parsing
     def parse_googleResults(self,response):
@@ -106,13 +107,24 @@ class GoogleCrawler():
             }
             data_array.append(json_data)
         return data_array
-    def jsonarray_toexcel(self,data_array):
+    def jsonarray_toexcel(self,data_array,path):
         df = pd.DataFrame(data=data_array)
-        df.to_excel('result.xlsx' , index=False)
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        filename = path + current_time + ".xlsx"
+        print("save result as "+filename)
+        try:
+            print("Save to pvc")
+            df.to_excel(filename , index=False)
+        except:
+            print("Save Error, Change")
+            print("Save to Root")
+            df.to_excel('result.xlsx' , index=False)
         return
 
 if __name__ == "__main__":
     query = "TSMC ASML"
+    path = '/var/log/history/'
     crawler = GoogleCrawler()
     results = crawler.google_search(query , 'qdr:w' , '10')
     print(results[:3])
@@ -126,5 +138,5 @@ if __name__ == "__main__":
     whitelist = ['ASML' , 'Intel']
     end_result = crawler.get_wordcount_json(whitelist , result_wordcount)
     print(end_result)
-    crawler.jsonarray_toexcel(end_result)
+    crawler.jsonarray_toexcel(end_result,path)
     print('Excel is OK')
