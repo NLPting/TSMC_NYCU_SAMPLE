@@ -1,5 +1,19 @@
-FROM python:3.6.15-slim
+FROM alpine:3.16
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    py3-pandas \
+    py3-requests \
+    py3-beautifulsoup4 \
+    py3-openpyxl
+
+RUN pip install \
+    requests-html \
+    nltk
+
+RUN python3 -m nltk.downloader -d /usr/share/nltk_data -q all
+
 COPY . /sample_crawler
 WORKDIR /sample_crawler
-RUN pip install -r ./requirements.txt
-CMD ["python","crawler_sample.py"]
+
+CMD ["python3", "crawler_sample.py"]
