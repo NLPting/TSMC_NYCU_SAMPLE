@@ -26,8 +26,7 @@ jobs:
           python3 -m nltk.downloader -d /usr/share/nltk_data -q popular
       - name: test
         run: >
-          python3 -m pytest . tests --doctest-modules
-          --cov-config=.coveragerc --cov=. --cov-report=term
+          python3 -m pytest . tests --doctest-modules --cov=. --cov-report=term
   package:
     needs: test
     if: ${{ github.ref == 'refs/heads/main' }}
