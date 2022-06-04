@@ -1,4 +1,4 @@
-name: Package container image
+name: CI
 on:
   push:
     paths-ignore:
@@ -11,7 +11,25 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: alpine:3.16
+    steps:
+      - uses: actions/checkout@v3
+      - name: prepare
+        run: >
+          apk add python3 py3-pip py3-wheel py3-requests py3-beautifulsoup4
+          py3-pytest py3-pytest-cov
+
+          pip install requests-html nltk
+
+          python3 -m nltk.downloader -d /usr/share/nltk_data -q popular
+      - name: test
+        run: >
+          python3 -m pytest . tests --doctest-modules
+          --cov-config=.coveragerc --cov=. --cov-report=term
   package:
+    needs: test
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     permissions:
